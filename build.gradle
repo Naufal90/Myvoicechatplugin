@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.naufal90.voicechat'
+version = '1.0'
+description = 'Custom Simple Voice Chat Plugin'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://maven.maxhenkel.de/repository/public/'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly 'de.maxhenkel.voicechat:voicechat-api:2.4.20'
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
