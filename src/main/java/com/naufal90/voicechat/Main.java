@@ -9,26 +9,30 @@ public class Main extends JavaPlugin implements VoicechatPlugin {
 
     private VoicechatServerApi voicechatApi;
     private WebSocketServer webSocketServer;
+    private VoiceChatHandler voiceChatHandler;
 
-    @Override
-    public void onEnable() {
-        getLogger().info("MyVoiceChatPlugin is enabled!");
+@Override
+public void onEnable() {
+    getLogger().info("MyVoiceChatPlugin is enabled!");
 
-        BukkitVoicechatService voicechatService = getServer().getServicesManager()
-                .load(BukkitVoicechatService.class);
+    BukkitVoicechatService voicechatService = getServer().getServicesManager()
+            .load(BukkitVoicechatService.class);
 
-        if (voicechatService != null) {
-            voicechatApi = voicechatService.getApi();
-            getLogger().info("VoiceChat API connected!");
-        } else {
-            getLogger().severe("Failed to connect to VoiceChat API!");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+    if (voicechatService != null) {
+        voicechatApi = voicechatService.getApi();
+        getLogger().info("VoiceChat API connected!");
 
-        webSocketServer = new WebSocketServer(24454);
-        webSocketServer.start();
+        voiceChatHandler = new VoiceChatHandler(voicechatApi);
+        voicechatApi.getEventBus().register(this, voiceChatHandler);
+    } else {
+        getLogger().severe("Failed to connect to VoiceChat API!");
+        getServer().getPluginManager().disablePlugin(this);
+        return;
     }
+
+    webSocketServer = new WebSocketServer(24454);
+    webSocketServer.start();
+}
 
     @Override
     public void onDisable() {
