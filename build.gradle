@@ -8,8 +8,17 @@ description = 'Custom Simple Voice Chat Plugin'
 
 repositories {
     mavenCentral()
+
+    // Repo PaperMC
     maven {
-        url = 'https://maven.maxhenkel.de/repository/public/'
+        name = 'PaperMC'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+
+    // Repo Maxhenkel (Simple Voice Chat)
+    maven {
+        name = 'Maxhenkel'
+        url = 'https://maven.maxhenkel.de/releases'
     }
 }
 
