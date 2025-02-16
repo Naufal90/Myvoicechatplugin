@@ -11,9 +11,15 @@ public class Main extends JavaPlugin implements VoicechatPlugin {
     private WebSocketServer webSocketServer;
     private VoiceChatHandler voiceChatHandler;
 
-@Override
+
+ @Override
 public void onEnable() {
     getLogger().info("MyVoiceChatPlugin is enabled!");
+    
+    saveDefaultConfig(); // Membuat config.yml jika belum ada
+
+    int webSocketPort = getConfig().getInt("websocket-port", 24454);
+    getLogger().info("Using WebSocket port: " + webSocketPort);
 
     BukkitVoicechatService voicechatService = getServer().getServicesManager()
             .load(BukkitVoicechatService.class);
@@ -30,10 +36,10 @@ public void onEnable() {
         return;
     }
 
-    webSocketServer = new WebSocketServer(24454);
+    webSocketServer = new WebSocketServer(webSocketPort);
     webSocketServer.start();
 }
-
+    
     @Override
     public void onDisable() {
         if (webSocketServer != null) {
