@@ -25,7 +25,7 @@ public void onEnable() {
             .load(BukkitVoicechatService.class);
 
     if (voicechatService != null) {
-        voicechatApi = voicechatService.getApi();
+        voicechatApi = voicechatService.voicechatServerApi();
         getLogger().info("VoiceChat API connected!");
 
         voiceChatHandler = new VoiceChatHandler(voicechatApi);
