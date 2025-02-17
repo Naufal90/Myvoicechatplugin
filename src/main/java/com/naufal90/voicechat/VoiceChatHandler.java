@@ -2,37 +2,40 @@ package com.naufal90.voicechat;
 
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.*;
-import de.maxhenkel.voicechat.api.audio.GroupAudioChannel;
-import de.maxhenkel.voicechat.api.audio.LocationalAudioChannel;
-import de.maxhenkel.voicechat.api.audio.PlayerAudioChannel;
-import de.maxhenkel.voicechat.api.audio.Position;
-import org.bukkit.Bukkit;
-
+import de.maxhenkel.voicechat.api.audio.*;
+import de.maxhenkel.voicechat.api.Position;
+import de.maxhenkel.voicechat.api.players.Player;
+import de.maxhenkel.voicechat.api.players.VoicechatPlayer;
+import de.maxhenkel.voicechat.api.events.Listener;
 import java.util.UUID;
 
-public class VoiceChatHandler implements VoicechatServerEventListener {
+public class VoiceChatHandler {
+
     private final VoicechatServerApi api;
 
     public VoiceChatHandler(VoicechatServerApi api) {
         this.api = api;
     }
 
-    @EventListener
-    public void onPlayerConnected(PlayerConnectedEvent event) {
-        UUID playerId = event.getPlayer().getUuid();
-        Bukkit.getLogger().info(playerId + " terhubung ke voice chat.");
+    @Listener
+    public void onPlayerConnect(PlayerConnectedEvent event) {
+        VoicechatPlayer player = event.getVoicechatPlayer();
+        UUID playerId = player.getUuid();
+        System.out.println("Player connected: " + playerId);
     }
 
-    @EventListener
-    public void onPlayerDisconnected(PlayerDisconnectedEvent event) {
-        UUID playerId = event.getPlayer().getUuid();
-        Bukkit.getLogger().info(playerId + " terputus dari voice chat.");
+    @Listener
+    public void onPlayerDisconnect(PlayerDisconnectedEvent event) {
+        VoicechatPlayer player = event.getVoicechatPlayer();
+        UUID playerId = player.getUuid();
+        System.out.println("Player disconnected: " + playerId);
     }
 
-    @EventListener
-    public void onVoicePacket(MicrophonePacketEvent event) {
-        UUID playerId = event.getSender().getUuid();
-        Bukkit.getLogger().info("Suara diterima dari: " + playerId);
+    @Listener
+    public void onMicrophonePacket(MicrophonePacketEvent event) {
+        VoicechatPlayer sender = event.getSender();
+        UUID senderId = sender.getUuid();
+        System.out.println("Microphone packet received from: " + senderId);
     }
 
     public LocationalAudioChannel createProximityChannel(UUID playerId, Position pos) {
@@ -43,10 +46,17 @@ public class VoiceChatHandler implements VoicechatServerEventListener {
         return api.createGroupAudioChannel(groupId, name);
     }
 
-    public void mutePlayer(UUID playerId, boolean mute) {
+    public void mutePlayer(UUID playerId) {
         PlayerAudioChannel channel = api.getPlayerAudioChannel(playerId);
         if (channel != null) {
-            channel.setMuted(mute);
+            channel.setMuted(true);
+        }
+    }
+
+    public void unmutePlayer(UUID playerId) {
+        PlayerAudioChannel channel = api.getPlayerAudioChannel(playerId);
+        if (channel != null) {
+            channel.setMuted(false);
         }
     }
 }
