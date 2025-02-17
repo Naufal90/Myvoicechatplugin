@@ -28,11 +28,11 @@ public <T extends Event> void registerEvent(Class<T> eventClass, Consumer<T> eve
     
     @Override
     public void registerEvents(VoicechatApi api) {
-        api.getEventBus().register(this, PlayerConnectedEvent.class, this::onPlayerConnected);
-        api.getEventBus().register(this, PlayerDisconnectedEvent.class, this::onPlayerDisconnected);
-        api.getEventBus().register(this, MicrophonePacketEvent.class, this::onVoicePacket);
+        voicechatApi.registerEvent(PlayerConnectedEvent.class, this::onPlayerConnected);
+        voicechatApi.registerEvent(PlayerDisconnectedEvent.class, this::onPlayerDisconnected);
+        voicechatApi.registerEvent(MicrophonePacketEvent.class, this::onVoicePacket);
     }
-
+      
     private void onPlayerConnected(PlayerConnectedEvent event) {
         UUID playerId = event.getPlayer().getUuid();
         Bukkit.getLogger().info("Player connected: " + playerId);
