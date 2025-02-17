@@ -73,7 +73,7 @@ public <T extends Event> void registerEvent(Class<T> eventClass, Consumer<T> eve
         if (voicechatApi == null) return;
 
         UUID playerId = player.getUniqueId();
-        LocationalAudioChannel channel = voicechatApi.createLocationalAudioChannel(playerId);
+        LocationalAudioChannel channel = voicechatApi.createLocationalAudioChannel(playerId, serverLevel, new Position(x, y, z));
         if (channel != null) {
             channel.setPosition(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
             player.sendMessage("Proximity voice enabled.");
