@@ -11,7 +11,7 @@ import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.WebSocket;
 
-public class WebSocketServer extends WebSocketServer {
+public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
     private Set<WebSocket> connections = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     public WebSocketServer(int port) {
