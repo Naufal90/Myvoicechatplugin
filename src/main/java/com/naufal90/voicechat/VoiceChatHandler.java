@@ -3,7 +3,6 @@ package com.naufal90.voicechat;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.Listener;
 import de.maxhenkel.voicechat.api.player.Player;
-import de.maxhenkel.voicechat.api.player.VoicechatPlayer;
 import de.maxhenkel.voicechat.api.audio.PlayerAudioChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
