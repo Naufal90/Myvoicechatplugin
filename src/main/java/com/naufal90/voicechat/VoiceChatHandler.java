@@ -22,6 +22,11 @@ public class VoiceChatHandler implements EventRegistration {
     }
 
     @Override
+public <T extends Event> void registerEvent(Class<T> eventClass, Consumer<T> eventConsumer, int priority) {
+    // Implementasi kosong atau sesuai kebutuhan
+}
+    
+    @Override
     public void registerEvents(VoicechatApi api) {
         api.getEventBus().register(this, PlayerConnectedEvent.class, this::onPlayerConnected);
         api.getEventBus().register(this, PlayerDisconnectedEvent.class, this::onPlayerDisconnected);
