@@ -4,47 +4,30 @@ import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.Optional;
-import java.util.logging.Logger;
 
 public class Main extends JavaPlugin implements VoicechatPlugin {
+
     private VoicechatServerApi voicechatApi;
     private VoiceChatHandler voiceChatHandler;
-    private WebSocketServer webSocketServer;
-    private static Logger logger;
 
     @Override
-    public void onEnable() {
-        logger = getLogger();
-        logger.info("MyVoiceChatPlugin is enabled!");
-
-        Optional<BukkitVoicechatService> service = getServer().getServicesManager()
-                .load(BukkitVoicechatService.class);
-
-        if (service.isEmpty()) {
-            logger.warning("VoiceChat API tidak ditemukan!");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        voicechatApi = service.get().getServerApi();
-        voiceChatHandler = new VoiceChatHandler(voicechatApi);
-
-        // Registrasi event
-        voicechatApi.getEventRegistry().register(this, voiceChatHandler);
-
-        // Jalankan WebSocket Server
-        webSocketServer = new WebSocketServer(24454);
-        webSocketServer.start();
-        logger.info("WebSocket server berjalan di port 24454!");
+    public String getPluginId() {
+        return "myvoicechatplugin";  // Sesuaikan dengan ID plugin di `plugin.yml`
     }
 
     @Override
-    public void onDisable() {
-        if (webSocketServer != null) {
-            webSocketServer.stopServer();
+    public void onEnable() {
+        Optional<BukkitVoicechatService> service = getServer().getServicesManager()
+                .load(BukkitVoicechatService.class);
+
+        if (service.isPresent()) {
+            voicechatApi = service.get().getVoicechatServerApi(); // Menggunakan metode yang benar
+            voiceChatHandler = new VoiceChatHandler(voicechatApi);
+            voicechatApi.getEventRegistry().register(this, voiceChatHandler);
+            getLogger().info("Voice chat plugin loaded successfully.");
+        } else {
+            getLogger().severe("Failed to load BukkitVoicechatService!");
         }
-        logger.info("MyVoiceChatPlugin is disabled!");
     }
 }
